@@ -2,6 +2,11 @@ CREATE OR REPLACE PROCEDURE build_star_schema()
 LANGUAGE plpgsql
 AS $$
 BEGIN
+  DROP TABLE IF EXISTS temp_dim_user;
+  DROP TABLE IF EXISTS temp_dim_skill;
+  DROP TABLE IF EXISTS temp_fact_task_performance;
+  DROP TABLE IF EXISTS temp_dim_task;
+  DROP TABLE IF EXISTS temp_fact_user_skill_level
   -- Dimension: User
   RAISE NOTICE 'Transforming dim_user...';
 
@@ -195,6 +200,10 @@ BEGIN
   VALUES (
     s.userid, s.skill_id, s.level, s.level_set_at
   );
+  DROP TABLE IF EXISTS temp_users;
+  DROP TABLE IF EXISTS temp_skill_areas;
+  DROP TABLE IF EXISTS temp_user_skill;
+  DROP TABLE IF EXISTS temp_tasks;
 
   RAISE NOTICE 'Star schema build completed successfully.';
 END;

@@ -3,24 +3,25 @@ LANGUAGE plpgsql
 AS $$
 
 BEGIN
+  DROP TABLE IF EXISTS temp_users;
+  DROP TABLE IF EXISTS temp_skill_areas;
+  DROP TABLE IF EXISTS temp_user_skill;
+  DROP TABLE IF EXISTS temp_tasks;
   -- USERS
   RAISE NOTICE 'Transforming user table...'; 
   CREATE TEMP TABLE temp_users AS
   SELECT 
-    id,
-    email,
-    accounttype,
-    istourcompleted,
-    currenttourstep,
-    avatar,
-    provider,
-    firstname,
-    lastname,
-    role,
-    createdat,
-    updatedat
-  FROM raw_schema."user"
-  WHERE email IS NOT NULL;
+    id, email, accounttype, istourcompleted, currenttourstep,
+    avatar, provider, firstname, lastname, role, createdat, updatedat
+  FROM (
+    SELECT 
+      id, email, accounttype, istourcompleted, currenttourstep,
+      avatar, provider, firstname, lastname, role, createdat, updatedat,
+      ROW_NUMBER() OVER (PARTITION BY id ORDER BY updatedat DESC) AS rn
+    FROM raw_schema."user"
+    WHERE email IS NOT NULL
+  ) ranked
+  WHERE rn = 1;
 
   CREATE TABLE IF NOT EXISTS curated.users (
     id VARCHAR(36) PRIMARY KEY,
@@ -63,15 +64,15 @@ BEGIN
   -- SKILL AREAS
   RAISE NOTICE 'Transforming skill area table...'; 
   CREATE TEMP TABLE temp_skill_areas AS
-  SELECT 
-    id,
-    name,
-    image_url,
-    total_xp,
-    createdat,
-    updatedat
-  FROM raw_schema.skillarea
-  WHERE name IS NOT NULL;
+  SELECT id, name, image_url, total_xp, createdat, updatedat
+  FROM (
+    SELECT 
+      id, name, image_url, total_xp, createdat, updatedat,
+      ROW_NUMBER() OVER (PARTITION BY id ORDER BY updatedat DESC) AS rn
+    FROM raw_schema.skillarea
+    WHERE name IS NOT NULL
+  ) ranked
+  WHERE rn = 1;
 
   CREATE TABLE IF NOT EXISTS curated.skill_areas (
     id VARCHAR(36) PRIMARY KEY,
@@ -101,16 +102,15 @@ BEGIN
   -- USER SKILLS
   RAISE NOTICE 'Transforming user skill table...'; 
   CREATE TEMP TABLE temp_user_skill AS
-  SELECT 
-    id,
-    userid,
-    skillareaid,
-    level,
-    current_xp,
-    createdat,
-    updatedat
-  FROM raw_schema.userskill
-  WHERE userid IS NOT NULL AND skillareaid IS NOT NULL;
+  SELECT id, userid, skillareaid, level, current_xp, createdat, updatedat
+  FROM (
+    SELECT 
+      id, userid, skillareaid, level, current_xp, createdat, updatedat,
+      ROW_NUMBER() OVER (PARTITION BY id ORDER BY updatedat DESC) AS rn
+    FROM raw_schema.userskill
+    WHERE userid IS NOT NULL AND skillareaid IS NOT NULL
+  ) ranked
+  WHERE rn = 1;
 
   CREATE TABLE IF NOT EXISTS curated.user_skill (
     id VARCHAR(36) PRIMARY KEY,
@@ -143,28 +143,21 @@ BEGIN
   RAISE NOTICE 'Transforming task table...'; 
   CREATE TEMP TABLE temp_tasks AS
   SELECT 
-    id,
-    type,
-    skillareaid,
-    difficulty,
-    xp,
-    content,
-    json_extract_path_text(content, 'prompt') AS prompt,
-    json_extract_path_text(content, 'input') AS input_example,
-    userid,
-    completed,
-    user_solution,
-    starttime,
-    status,
-    expiredtime,
-    time_limit,
-    recommendation,
-    createdat,
-    updatedat,
-    iscorrect,
-    isrecommended
-  FROM raw_schema.task
-  WHERE userid IS NOT NULL;
+    id, type, skillareaid, difficulty, xp, content, prompt, input_example,
+    userid, completed, user_solution, starttime, status, expiredtime,
+    time_limit, recommendation, createdat, updatedat, iscorrect, isrecommended
+  FROM (
+    SELECT 
+      id, type, skillareaid, difficulty, xp, content,
+      json_extract_path_text(content, 'prompt') AS prompt,
+      json_extract_path_text(content, 'input') AS input_example,
+      userid, completed, user_solution, starttime, status, expiredtime,
+      time_limit, recommendation, createdat, updatedat, iscorrect, isrecommended,
+      ROW_NUMBER() OVER (PARTITION BY id ORDER BY updatedat DESC) AS rn
+    FROM raw_schema.task
+    WHERE userid IS NOT NULL
+  ) ranked
+  WHERE rn = 1;
 
   CREATE TABLE IF NOT EXISTS curated.tasks (
     id VARCHAR(36) PRIMARY KEY,
