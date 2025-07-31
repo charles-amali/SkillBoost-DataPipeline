@@ -31,7 +31,7 @@ The pipeline is built using a **medallion architecture** (bronze → silver → 
 | `main.tf`             | Root Terraform module with all child modules |
 | `provider.tf`         | AWS provider configuration |
 | `variables.tf`        | Variable definitions |
-| `outputs.tf`          | Outputs (Redshift info, Step Function ARNs, etc.) |
+| `outputs.tf`          | Outputs (Redshift, RDS endpoints.) |
 | `iam.tf`              | IAM roles/policies for Glue, Lambda, and Step Functions |
 | `glue.tf`             | Glue Job definition for RDS → Redshift |
 | `connection.tf`       | JDBC connection to the RDS database and redshift |
