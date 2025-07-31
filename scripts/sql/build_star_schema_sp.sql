@@ -167,8 +167,6 @@ BEGIN
     s.task_id, s.userid, s.skill_id, s.completed, s.xp, s.user_solution, s.attempt_time
   );
 
-  -- GET DIAGNOSTICS row_count = ROW_COUNT;
-  -- RAISE NOTICE 'Inserted/updated % rows into fact_task_performance.', row_count;
 
   RAISE NOTICE 'Transforming fact_user_skill_level...';
 
