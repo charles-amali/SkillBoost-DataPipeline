@@ -200,11 +200,6 @@ BEGIN
   VALUES (
     s.userid, s.skill_id, s.level, s.level_set_at
   );
-  DROP TABLE IF EXISTS temp_users;
-  DROP TABLE IF EXISTS temp_skill_areas;
-  DROP TABLE IF EXISTS temp_user_skill;
-  DROP TABLE IF EXISTS temp_tasks;
-
   RAISE NOTICE 'Star schema build completed successfully.';
 END;
 $$;
