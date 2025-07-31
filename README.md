@@ -1,7 +1,7 @@
 
 #  SkillBoost Analytics Platform
 
-A production-ready, cost-effective, and secure **batch analytics pipeline** built on AWS. This project ingests task performance data from a backend production database and automates ETL workflows into a dimensional data model ready for analytics with Power BI.
+A production-ready, cost-effective, and secure **batch analytics pipeline** built on AWS. This project ingests data from a backend production database and automates ETL workflows into a dimensional data model ready for analytics with Power BI.
 
 ---
 
