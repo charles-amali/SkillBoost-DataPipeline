@@ -13,7 +13,6 @@ resource "aws_glue_job" "rds_to_redshift" {
   command {
     name            = "glueetl"
     script_location = "s3://${aws_s3_object.glue_script.bucket}/${aws_s3_object.glue_script.key}"
-    # script_location = "s3://skillboost/scripts/extract_rds_to_redshift.py"
     python_version  = "3"
   }
 

@@ -3,7 +3,3 @@ locals {
   redshift_url = "jdbc:redshift://${aws_redshift_cluster.skillboost_cluster.endpoint}/${var.redshift_db}"
 }
 
-
-# locals {
-  
-# }

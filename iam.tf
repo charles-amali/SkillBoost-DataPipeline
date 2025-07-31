@@ -16,7 +16,6 @@ resource "aws_iam_role" "glue_role" {
   })
 }
 
-# ✅ S3 Read/Write for temp & scripts
 resource "aws_iam_policy" "glue_s3_access" {
   name = "${var.project_name}-glue-s3-access"
 
@@ -46,7 +45,6 @@ resource "aws_iam_policy" "glue_s3_access" {
   })
 }
 
-# ✅ Redshift: Only allow connection & COPY/UNLOAD
 resource "aws_iam_policy" "glue_redshift_access" {
   name = "${var.project_name}-glue-redshift-access"
 
@@ -66,7 +64,6 @@ resource "aws_iam_policy" "glue_redshift_access" {
   })
 }
 
-# ✅ RDS: Allow JDBC connection (via Secrets Manager if used)
 resource "aws_iam_policy" "glue_rds_access" {
   name = "${var.project_name}-glue-rds-access"
 
@@ -85,7 +82,6 @@ resource "aws_iam_policy" "glue_rds_access" {
   })
 }
 
-# ✅ Attach all policies to Glue role
 resource "aws_iam_role_policy_attachment" "glue_s3_attach" {
   role       = aws_iam_role.glue_role.name
   policy_arn = aws_iam_policy.glue_s3_access.arn
@@ -101,7 +97,6 @@ resource "aws_iam_role_policy_attachment" "glue_rds_attach" {
   policy_arn = aws_iam_policy.glue_rds_access.arn
 }
 
-# Keep AWSGlueServiceRole for Glue internals
 resource "aws_iam_role_policy_attachment" "glue_service_attach" {
   role       = aws_iam_role.glue_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
@@ -121,10 +116,6 @@ resource "aws_iam_role" "stepfn_role" {
   })
 }
 
-# resource "aws_iam_role_policy_attachment" "stepfn_redshift_access" {
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonRedshiftFullAccess"
-#   role       = aws_iam_role.stepfn_role.name
-# }
 
 resource "aws_iam_policy" "stepfn_redshift_access" {
   name = "${var.project_name}-stepfn-redshift-access"
@@ -146,11 +137,6 @@ resource "aws_iam_role_policy_attachment" "stepfn_redshift_attach" {
   role       = aws_iam_role.stepfn_role.name
   policy_arn = aws_iam_policy.stepfn_redshift_access.arn
 }
-
-# resource "aws_iam_role_policy_attachment" "stepfn_glue_access" {
-#   policy_arn = "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"
-#   role       = aws_iam_role.stepfn_role.name
-# }
 
 resource "aws_iam_policy" "stepfn_glue_access" {
   name = "${var.project_name}-stepfn-glue-access"

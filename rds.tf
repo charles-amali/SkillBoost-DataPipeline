@@ -30,9 +30,6 @@ resource "aws_security_group" "allow_postgres" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    # security_groups = [aws_security_group.allow_glue.id]
-    # cidr_blocks = ["0.0.0.0/0"]  # Restrict to your IP if preferred
-    # cidr_blocks = ["${chomp(data.http.my_ip.body)}/32"]
     cidr_blocks = ["${chomp(data.http.my_ip.response_body)}/32"]
 
   }

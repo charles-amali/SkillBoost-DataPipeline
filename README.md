@@ -4,7 +4,7 @@ This repository provisions the AWS infrastructure for the SkillBoost Analytics d
 
 ---
 
-## 🚀 Architecture Overview
+## Architecture Overview
 
 This project sets up a batch data pipeline with:
 
@@ -18,7 +18,7 @@ This project sets up a batch data pipeline with:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 | File                | Description |
 |---------------------|-------------|
@@ -35,7 +35,7 @@ This project sets up a batch data pipeline with:
 
 ---
 
-## ✅ Prerequisites
+## Prerequisites
 
 - Terraform CLI installed
 - AWS credentials set via CLI or profile
@@ -47,5 +47,5 @@ This project sets up a batch data pipeline with:
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/skillboost-analytics-iac.git
-cd skillboost-analytics-iac
+git clone "https://github.com/charles-amali/SkillBoost-DataPipeline.git"
+cd SkillBoost-DataPipeline
