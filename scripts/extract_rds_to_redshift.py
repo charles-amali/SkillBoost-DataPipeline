@@ -8,15 +8,10 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 
-# -----------------------
-# Logging Setup
-# -----------------------
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# -----------------------
-# Glue Boilerplate
-# -----------------------
+
 args = getResolvedOptions(sys.argv, [
     'JOB_NAME', 
     'rds_database', 
@@ -34,9 +29,7 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-# -----------------------
-# Config (These should ideally be passed via Glue job arguments)
-# -----------------------
+
 rds_table_list = ["Task", "UserSkill", "SkillArea", "User"]
 jdbc_connection_name = "rds-skillboost-conn"
 redshift_connection_name = "redshift-conn"
@@ -44,9 +37,6 @@ redshift_temp_dir = "s3://skillboost/redshift-dir/temp/"
 redshift_schema = "raw_schema"
 redshift_db = "skillboost_analytics"
 
-# -----------------------
-# Helper Functions
-# -----------------------
 def extract_table_from_rds(table_name):
     logger.info(f"Extracting table: {table_name}")
     try:
@@ -86,9 +76,7 @@ def load_table_to_redshift(dynamic_frame, table_name):
         logger.error(f"Failed to load {table_name} to Redshift: {str(e)}")
         raise
 
-# -----------------------
-# Main ETL Loop
-# -----------------------
+
 for table in rds_table_list:
     df = extract_table_from_rds(table)
     load_table_to_redshift(df, table)
